@@ -1,0 +1,17 @@
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+
+# IDE/editor settings 
+.vscode/
+.idea/
+*.iml
+
+# Frontend & backend ignore (if someone accidentally runs npm install here)
+node_modules/
+
+# Prevent double-committing of env files accidentally placed here
+.env
