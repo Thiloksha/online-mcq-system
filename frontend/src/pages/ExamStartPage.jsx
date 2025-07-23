@@ -1,57 +1,79 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../styles/ExamStartPage.css';
 
 const ExamStartPage = () => {
-  const { id } = useParams(); // exam ID from URL param
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({}); // user answers keyed by question index
+  const [answers, setAnswers] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [examIndex, setExamIndex] = useState(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    axios.get(`/api/exams/${id}/questions`)
-      .then(res => {
-        setQuestions(res.data);
+    const fetchExamData = async () => {
+      try {
+        const [allExamsRes, questionsRes] = await Promise.all([
+          axios.get('/api/exams'),
+          axios.get(`/api/exams/${id}/questions`)
+        ]);
+
+        const allExams = allExamsRes.data;
+        const index = allExams.findIndex(exam => exam._id === id);
+        if (index !== -1) {
+          setExamIndex(index + 1);
+        }
+
+        setQuestions(questionsRes.data);
+      } catch (err) {
+        setError('Failed to load exam or questions');
+      } finally {
         setLoading(false);
-      })
-      .catch(() => {
-        setError('Failed to load questions');
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchExamData();
   }, [id]);
 
   const handleOptionChange = (qIndex, option) => {
     setAnswers(prev => ({ ...prev, [qIndex]: option }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmitClick = () => {
     if (Object.keys(answers).length < questions.length) {
       alert('Please answer all questions before submitting.');
       return;
     }
-    setSubmitted(true);
+    setShowConfirm(true);
   };
 
-  const calculateScore = () => {
-    return questions.reduce((score, question, index) => {
-      return answers[index] === question.answer ? score + 1 : score;
-    }, 0);
+  const handleFinalSubmit = () => {
+    setShowConfirm(false);
+    setSubmitted(true);
+    setShowSuccess(true);
   };
 
   if (loading) return <p>Loading questions...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div style={{ maxWidth: '700px', margin: 'auto', padding: '2rem' }}>
-      <h2>Mock Paper {id}</h2>
+    <div className="exam-container">
+      <h2>Mock Paper {examIndex}</h2>
 
       {questions.map((q, index) => (
-        <div key={q._id || index} style={{ marginBottom: '1.5rem' }}>
+        <div key={q._id || index} className="question-block">
           <h4>Q{index + 1}. {q.question}</h4>
           {q.options.map(option => (
-            <label key={option} style={{ display: 'block', marginBottom: '0.4rem', cursor: submitted ? 'default' : 'pointer' }}>
+            <label
+              key={option}
+              className={`option-label ${submitted ? 'disabled' : ''}`}
+            >
               <input
                 type="radio"
                 name={`question-${index}`}
@@ -59,7 +81,6 @@ const ExamStartPage = () => {
                 disabled={submitted}
                 checked={answers[index] === option}
                 onChange={() => handleOptionChange(index, option)}
-                style={{ marginRight: '0.5rem' }}
               />
               {option}
             </label>
@@ -67,24 +88,30 @@ const ExamStartPage = () => {
         </div>
       ))}
 
-      {!submitted ? (
-        <button
-          onClick={handleSubmit}
-          style={{
-            padding: '0.7rem 1.5rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            marginTop: '1rem',
-          }}
-        >
+      {!submitted && (
+        <button className="submit-button" onClick={handleSubmitClick}>
           Submit Answers
         </button>
-      ) : (
-        <div style={{ marginTop: '1.5rem', fontSize: '1.2rem' }}>
-          <strong>Your Score: {calculateScore()} / {questions.length}</strong>
+      )}
+
+      {showConfirm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>Are you sure you want to submit your answers?</p>
+            <div className="modal-buttons">
+              <button onClick={() => setShowConfirm(false)}>Return to Attempt</button>
+              <button onClick={handleFinalSubmit}>Submit</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccess && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <p>You have successfully finished the exam!🎉</p>
+            <button onClick={() => navigate('/exams')}>Back</button>
+          </div>
         </div>
       )}
     </div>

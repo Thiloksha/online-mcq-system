@@ -16,7 +16,7 @@ const HomePage = () => {
       <p>You are now logged in to the Online MCQ Exam System.</p>
 
       <div className="card" onClick={handleCardClick}>
-        <h2>Exam Paper List</h2>
+        <h2>Exam Papers</h2>
         <p>View and attempt available exams</p>
       </div>
     </div>
