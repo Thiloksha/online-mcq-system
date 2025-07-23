@@ -23,9 +23,10 @@ app.listen(process.env.PORT, () => {
     console.log(`🚀 Server running on port ${process.env.PORT}`);
 });
 
-app.use('/api', examRoutes);
-app.use('/api', resultRoutes);
+app.use('/api/exams', examRoutes);
+app.use('/api/results', resultRoutes);
 
-app.listen(process.env.PORT, () => {
-    console.log(`🚀 Server running on port ${process.env.PORT}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });

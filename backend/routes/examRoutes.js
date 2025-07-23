@@ -4,7 +4,7 @@ const router = express.Router();
 const Exam = require('../models/Exam');
 const Question = require('../models/Question');
 
-router.get('/exams', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const exams = await Exam.find();
     res.json(exams);
@@ -13,7 +13,21 @@ router.get('/exams', async (req, res) => {
   }
 });
 
-router.get('/exams/:id/questions', async (req, res) => {
+router.post('/', async (req, res) => {
+  try {
+    const newExam = new Exam({
+      title: req.body.title,
+      description: req.body.description
+    });
+
+    const savedExam = await newExam.save();
+    res.status(201).json(savedExam);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+router.get('/:id/questions', async (req, res) => {
   try {
     const questions = await Question.find({ examId: req.params.id });
     res.json(questions);
