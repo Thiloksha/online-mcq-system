@@ -6,7 +6,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ExamPage from './pages/ExamPage';
 import AttemptPage from './pages/AttemptPage';
 import ExamStartPage from './pages/ExamStartPage';
- 
+import ResultsPage from './pages/ResultsPage'; 
+import ResultDetailPage from './pages/ResultDetailPage';
+
 function App() {
   return (
     <Router>
@@ -37,6 +39,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/results" element={<ResultsPage />} />
+        <Route path="/results/:examId" element={<ResultDetailPage />} />
       </Routes>
     </Router>
   );

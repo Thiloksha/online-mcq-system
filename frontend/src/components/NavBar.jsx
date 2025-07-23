@@ -16,7 +16,7 @@ function NavBar() {
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
         <li><Link to="/exams">Exams</Link></li>
-        <li><Link to="/result">Results</Link></li>
+        <li><Link to="/results">Results</Link></li>
 
         {isLoggedIn() ? (
           <li><button onClick={handleLogout} className="logout-btn">Logout</button></li>
