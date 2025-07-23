@@ -32,3 +32,32 @@ exports.getQuestionsByExamId = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+exports.addMultipleQuestionsToExam = async (req, res) => {
+  const examId = req.params.id;
+  const questions = req.body.questions;
+
+  try {
+    const questionDocs = questions.map(q => ({
+      examId: examId,
+      questionText: q.questionText,   
+      options: q.options,
+      correctOption: q.correctOption 
+    }));
+
+    const savedQuestions = await Question.insertMany(questionDocs);
+    res.status(201).json(savedQuestions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getExamById = async (req, res) => {
+  try {
+    const exam = await Exam.findById(req.params.id);
+    if (!exam) return res.status(404).json({ message: 'Exam not found' });
+    res.json(exam);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};

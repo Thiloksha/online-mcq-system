@@ -15,7 +15,7 @@ function NavBar() {
       <div className="logo">MCQ System</div>
       <ul className="nav-links">
         <li><Link to="/">Home</Link></li>
-        <li><Link to="/exam">Exams</Link></li>
+        <li><Link to="/exams">Exams</Link></li>
         <li><Link to="/result">Results</Link></li>
 
         {isLoggedIn() ? (

@@ -1,0 +1,36 @@
+
+.exam-page {
+  padding: 2rem;
+  text-align: center;
+}
+
+.exam-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; 
+  max-width: 500px; 
+  margin: 2rem auto 0 auto;
+}
+
+.exam-card {
+    width: 500px;
+    height: 70px;
+    background-color: #f1f1f1;
+    border: 2px solid #007bff;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.exam-card:hover {
+    transform: translateY(-4px);
+    background-color: #e6f0ff;
+}
+
+.exam-card h3 {
+    margin: 0;
+    color: #007bff;
+}
