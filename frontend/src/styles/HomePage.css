@@ -1,0 +1,33 @@
+/* HomePage.css */
+
+.home-container {
+  padding: 2rem;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-container h1 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.home-container p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.logout-button {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.logout-button:hover {
+  background-color: #0056b3;
+}
