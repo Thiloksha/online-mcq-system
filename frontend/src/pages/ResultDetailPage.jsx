@@ -1,4 +1,3 @@
-// src/pages/ResultDetailPage.jsx
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
@@ -16,7 +15,6 @@ const ResultDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // For demo, simulate fetching user answers (replace with your API call)
   useEffect(() => {
     const fetchData = async () => {
       try {

@@ -1,6 +1,6 @@
 import { getUser } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
-import '../styles/HomePage.css'; // <- Import the CSS file
+import '../styles/HomePage.css';
 
 const HomePage = () => {
   const user = getUser();

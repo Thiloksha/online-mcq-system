@@ -1,8 +1,8 @@
 const staticUser = {
-  _id: "64efef1b2f66e876543210ab", // sample ObjectId string (fake)
+  _id: "64efef1b2f66e876543210ab", 
   name: "Student One",
   email: "student@example.com",
-  password: "password123", // Plain text only for mock login
+  password: "password123", 
 };
 
 exports.login = (req, res) => {

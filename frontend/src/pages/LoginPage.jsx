@@ -12,21 +12,32 @@ function LoginPage() {
   };
 
   const handleSubmit = async e => {
-    e.preventDefault();
+  e.preventDefault();
+  setError('');
 
-    const { email, password } = formData;
+  try {
+    const response = await fetch('http://localhost:3000/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
 
-    if (email === 'student1@example.com' && password === 'student123@') {
-      const fakeToken = 'dummy-token-123';
-    const fakeUser = { email };
+    const data = await response.json();
 
-    localStorage.setItem('token', fakeToken);
-    localStorage.setItem('user', JSON.stringify(fakeUser));
+    if (data.success) {
+      localStorage.setItem('token', 'dummy-token'); 
+      localStorage.setItem('user','unknown-user', JSON.stringify(data.user)); 
       navigate('/');
     } else {
-      setError('Invalid credentials');
+      setError(data.message || 'Invalid credentials');
     }
-  };
+  } catch (err) {
+    setError('Login failed');
+    console.error(err);
+  }
+};
 
   return (
     <div className="login-container">

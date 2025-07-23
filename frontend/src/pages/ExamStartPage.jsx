@@ -53,11 +53,53 @@ const ExamStartPage = () => {
     setShowConfirm(true);
   };
 
-  const handleFinalSubmit = () => {
-    setShowConfirm(false);
-    setSubmitted(true);
-    setShowSuccess(true);
+  const handleFinalSubmit = async () => {
+  setShowConfirm(false);
+  setSubmitted(true);
+  setShowSuccess(true);
+
+  let userId = 'unknown-user';
+  try {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      if (parsedUser) {
+        userId = parsedUser._id || parsedUser.id || 'unknown-user';
+      }
+    }
+  } catch (e) {
+    console.error("Failed to parse user from localStorage", e);
+  }
+
+  let score = 0;
+  const answersArray = questions.map((question, index) => {
+    const selectedOption = answers[index];
+    const isCorrect = selectedOption === question.correctOption; 
+    if (isCorrect) score += 1;
+    return {
+      questionId: question._id,
+      selectedOption,
+      isCorrect
+    };
+  });
+
+  try {
+  const payload = {
+    examId: id,
+    userId,
+    score,
+    answers: answersArray
   };
+
+  console.log("Submitting result payload:", payload);
+
+  const response = await axios.post('/api/results', payload);
+  console.log("Result saved:", response.data);
+} catch (err) {
+  console.error("Failed to save result:", err.response?.data || err.message);
+}
+};
+
 
   if (loading) return <p>Loading questions...</p>;
   if (error) return <p>{error}</p>;
@@ -68,7 +110,7 @@ const ExamStartPage = () => {
 
       {questions.map((q, index) => (
         <div key={q._id || index} className="question-block">
-          <h4>Q{index + 1}. {q.question}</h4>
+          <h4>Q{index + 1}. {q.questionText}</h4>
           {q.options.map(option => (
             <label
               key={option}
